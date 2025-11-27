@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>给射手座宝贝安佳的生日祝福</title>
+    <!-- 引入外部资源 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+    <style>
+        /* 全局样式 */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Microsoft YaHei", sans-serif;
+            background: linear-gradient(135deg, #1a2a6c, #2c3e50, #20002c);
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        /* 3D星空背景容器 */
+        #stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        /* 页面头部 */
+        .header {
+            text-align: center;
+            padding: 50px 0;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px #ff6b6b, 0 0 40px #ff8e8e;
+            animation: glow 2s infinite alternate;
+        }
+        
+        .sagittarius-icon {
+            font-size: 5rem;
+            color: #ffd700;
+            margin-bottom: 20px;
+            animation: rotate 10s linear infinite;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 20px #ff6b6b, 0 0 40px #ff8e8e; }
+            to { text-shadow: 0 0 30px #ff3333, 0 0 60px #ff6666; }
+        }
+        
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        /* 页签样式 */
+        .tabs-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .nav-tabs {
+            justify-content: center;
+            border-bottom: none;
+            margin-bottom: 30px;
+        }
+        
+        .nav-tabs .nav-link {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 30px 30px 0 0;
+            padding: 15px 30px;
+            margin: 0 5px;
+            font-size: 1.2rem;
+        }
+        
+        .nav-tabs .nav-link.active {
+            background: rgba(255, 215, 0, 0.8);
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        
+        /* 轮播图样式 */
+        .carousel-item img {
+            height: 500px;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+            /* text-align: center; */
+        }
+        
+        .carousel-caption {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            padding: 20px;
+        }
+        
+        /* 内容卡片样式 */
+        .content-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .content-card h2 {
+            color: #ffd700;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .content-card h2::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background: #ffd700;
+        }
+        
+        .wish-text {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+        
+        /* 鲜花动画样式 */
+        .flower-container {
+            position: relative;
+            height: 300px;
+            margin: 50px 0;
+        }
+        
+        /* 弹窗样式 */
+        .modal-content {
+            background: linear-gradient(135deg, #2c3e50, #1a2a6c);
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            text-align: center;
+        }
+        
+        .modal-header {
+            border-bottom: none;
+        }
+        
+        .modal-footer {
+            border-top: none;
+        }
+        
+        /* 按钮样式 */
+        .btn-custom {
+            background: #ffd700;
+            color: #2c3e50;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-custom:hover {
+            background: #ffed4e;
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+        }
+        
+        /* 3D射手座模型容器 */
+        #sagittarius-3d {
+            height: 400px;
+            margin: 50px 0;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        
+        /* 音频控制样式 */
+        audio {
+            width: 100%;
+            margin: 30px 0;
+            filter: hue-rotate(200deg) saturate(150%);
+        }
+        
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .carousel-item img {
+                height: 300px;
+            }
+            
+            .nav-tabs .nav-link {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 3D星空背景 -->
+    <div id="stars-container"></div>
+
+    <!-- 页面头部 -->
+    <div class="header">
+        <div class="sagittarius-icon">♐</div>
+        <h1>祝我的射手座宝贝安佳11.29生日快乐！</h1>
+        <p class="lead">To: 最爱的佳佳 | From: 永远守护你的磊</p>
+        <button class="btn btn-custom" onclick="playMusic()">🎵 播放生日歌</button>
+    </div>
+
+    <!-- 页签容器 -->
+    <div class="tabs-container">
+        <ul class="nav nav-tabs" id="birthdayTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="memories-tab" data-bs-toggle="tab" data-bs-target="#memories" type="button" role="tab">我们的回忆</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="wish-tab" data-bs-toggle="tab" data-bs-target="#wish" type="button" role="tab">专属祝福</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="adventure-tab" data-bs-toggle="tab" data-bs-target="#adventure" type="button" role="tab">未来冒险</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="surprise-tab" data-bs-toggle="tab" data-bs-target="#surprise" type="button" role="tab">惊喜彩蛋</button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="birthdayTabsContent">
+            <!-- 回忆页签 -->
+            <div class="tab-pane fade show active" id="memories" role="tabpanel">
+                <div class="content-card">
+                    <h2>我们的美好瞬间</h2>
+                    <!-- 轮播图 -->
+                    <div id="memoriesCarousel" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#memoriesCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#memoriesCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#memoriesCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            <button type="button" data-bs-target="#memoriesCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="https://i-blog.csdnimg.cn/direct/8600428582ae458a93281a8a04ee6cd8.jpeg" class="d-block w-100" alt="第一次约会">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>第一次约会</h5>
+                                    <p>还记得我们去的那家餐厅吗？你笑起来的样子我记了好久～</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://i-blog.csdnimg.cn/direct/b5c4fc0698f94e319e49383f82e7f1aa.jpeg" class="d-block w-100" alt="第一次送花">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>第一次送花</h5>
+                                    <p>你说喜欢仪式感，我就想跋涉百里送你花～</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://i-blog.csdnimg.cn/direct/5e8f6cdf1e0e445f9c38005cf566aba6.jpeg" class="d-block w-100" alt="生日惊喜">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>你的笑容</h5>
+                                    <p>每次看到你笑，我都觉得拥有了全世界～</p>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <img src="https://i-blog.csdnimg.cn/direct/f717350c0dad4b47852c9b034cabf710.jpeg" class="d-block w-100" alt="日常点滴">
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>日常的小幸福</h5>
+                                    <p>和你在一起的每一天，都是我最珍贵的回忆～</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#memoriesCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#memoriesCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 祝福页签 -->
+            <div class="tab-pane fade" id="wish" role="tabpanel">
+                <div class="content-card">
+                    <h2>给射手座宝贝佳佳的专属祝福</h2>
+                    <div class="wish-text">
+                        <p>亲爱的宝贝，今天是你的生日，11月29日，属于你的射手座生日～</p>
+                        <p>我知道你像射手座的箭，向往自由，热爱探索，永远对生活充满热情。</p>
+                        <p>谢谢你出现在我的生命里，像一道光，照亮了我的所有日子。</p>
+                        <p>愿我的射手座女孩永远保持这份纯真和勇敢，想去的地方我陪你去，想做的事我支持你，想飞的时候我就是你的翅膀～</p>
+                        <p>生日快乐，我的小探险家！新的一岁，继续和我一起解锁更多美好吧～</p>
+                    </div>
+                    
+                    <!-- 鲜花动画容器 -->
+                    <div class="flower-container" id="flower-container"></div>
+                    
+                    <button class="btn btn-custom" onclick="showLovePopup()">💌 点击解锁悄悄话</button>
+                </div>
+            </div>
+
+            <!-- 未来冒险页签 -->
+            <div class="tab-pane fade" id="adventure" role="tabpanel">
+                <div class="content-card">
+                    <h2>我们的未来冒险计划</h2>
+                    <div class="wish-text">
+                        <p>作为你的专属冒险搭档，我已经规划好了我们的下一站：</p>
+                        <ul style="font-size: 1.2rem; line-height: 2;">
+                            <li>🌄 春天去北京看迎春花</li>
+                            <li>🏕️ 夏天去海边露营看星星</li>
+                            <li>🍂 秋天去山东徒步</li>
+                            <li>⛄ 冬天去哈尔滨看冰雪大世界</li>
+                            <li>✈️ 还有你一直想去的母校美食之旅</li>
+                        </ul>
+                        <p>只要你想，我就愿意陪你去任何地方，我的射手座宝贝～</p>
+                    </div>
+                    
+                    <!-- 3D射手座模型 -->
+                    <div id="sagittarius-3d"></div>
+                </div>
+            </div>
+
+            <!-- 惊喜彩蛋页签 -->
+            <div class="tab-pane fade" id="surprise" role="tabpanel">
+                <div class="content-card">
+                    <h2>生日惊喜彩蛋</h2>
+                    <div class="wish-text">
+                        <p>点击下方按钮，解锁你的生日惊喜～</p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button class="btn btn-custom" onclick="showSurprise()">🎁 解锁惊喜</button>
+                        <div id="surprise-content" style="margin-top: 30px; display: none;">
+                            <h3>🎉 生日福利清单 🎉</h3>
+                            <p>1. 免生气特权卡 × 10张</p>
+                            <p>2. 甜品自由券 × 1张（有效期：一整年）</p>
+                            <p>3. 专属摄影师服务（陪你拍遍所有想去的地方）</p>
+                            <p>4. 周末惊喜旅行（目的地：你最近念叨的那家温泉民宿）</p>
+                            <p>5. 无限拥抱和亲吻（随时兑换）</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 音频元素 -->
+    <audio id="birthdayMusic" loop>
+        <source src="https://music.163.com/song/media/outer/url?id=1818305107.mp3" type="audio/mpeg">
+        你的浏览器不支持音频播放
+    </audio>
+
+    <!-- 悄悄话弹窗 -->
+    <div class="modal fade" id="lovePopup" tabindex="-1" aria-labelledby="lovePopupLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="lovePopupLabel">💌 只对你说的悄悄话</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="wish-text">
+                        <p>亲爱的宝贝：</p>
+                        <p>其实我偷偷练习了好多次祝你生日快乐，但真正想说的是：</p>
+                        <p>谢谢你包容我的小缺点，谢谢你总是给我带来快乐，谢谢你选择和我一起走这段路。</p>
+                        <p>我不是最完美的，但我会努力成为最懂你、最疼你的人。</p>
+                        <p>射手座的你就像小太阳，而我想做永远追着太阳的人～</p>
+                        <p>生日快乐，我爱你！佳佳</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-custom" data-bs-dismiss="modal">❤️ 收到爱意</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入JS脚本 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 3D星空背景
+        function initStars() {
+            const container = document.getElementById('stars-container');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            container.appendChild(renderer.domElement);
+
+            // 创建星星
+            const starsGeometry = new THREE.BufferGeometry();
+            const starsMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.5 });
+            const starsVertices = [];
+            
+            for (let i = 0; i < 10000; i++) {
+                const x = (Math.random() - 0.5) * 2000;
+                const y = (Math.random() - 0.5) * 2000;
+                const z = (Math.random() - 0.5) * 2000;
+                starsVertices.push(x, y, z);
+            }
+            
+            starsGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starsVertices, 3));
+            const stars = new THREE.Points(starsGeometry, starsMaterial);
+            scene.add(stars);
+
+            camera.position.z = 30;
+
+            // 动画循环
+            function animate() {
+                requestAnimationFrame(animate);
+                stars.rotation.x += 0.0005;
+                stars.rotation.y += 0.0005;
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+
+            // 响应窗口大小变化
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        // 播放音乐
+        function playMusic() {
+            const audio = document.getElementById('birthdayMusic');
+            audio.play();
+        }
+
+        // 显示悄悄话弹窗
+        function showLovePopup() {
+            const modal = new bootstrap.Modal(document.getElementById('lovePopup'));
+            modal.show();
+        }
+
+        // 显示惊喜
+        function showSurprise() {
+            const surpriseContent = document.getElementById('surprise-content');
+            gsap.fromTo(surpriseContent, { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1 });
+            surpriseContent.style.display = 'block';
+        }
+
+        // 创建鲜花动画
+        function createFlowers() {
+            const container = document.getElementById('flower-container');
+            
+            for (let i = 0; i < 20; i++) {
+                const flower = document.createElement('div');
+                flower.innerHTML = '🌸';
+                flower.style.position = 'absolute';
+                flower.style.fontSize = `${Math.random() * 30 + 20}px`;
+                flower.style.left = `${Math.random() * 100}%`;
+                flower.style.top = `${Math.random() * 100}%`;
+                flower.style.opacity = 0;
+                
+                container.appendChild(flower);
+                
+                gsap.fromTo(flower, 
+                    { opacity: 0, y: 50, rotate: 0 }, 
+                    { 
+                        opacity: 1, 
+                        y: Math.random() * -50, 
+                        rotate: Math.random() * 360,
+                        duration: 2,
+                        delay: i * 0.1,
+                        repeat: -1,
+                        repeatDelay: Math.random() * 3 + 2,
+                        yoyo: true
+                    }
+                );
+            }
+        }
+
+        // 初始化3D射手座模型
+        function initSagittarius3D() {
+            const container = document.getElementById('sagittarius-3d');
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(60, container.clientWidth / container.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+
+            // 创建射手座符号
+            const geometry = new THREE.TorusKnotGeometry(10, 3, 100, 16);
+            const material = new THREE.MeshPhongMaterial({ 
+                color: 0xffd700,
+                emissive: 0x444444,
+                shininess: 100
+            });
+            const torusKnot = new THREE.Mesh(geometry, material);
+            scene.add(torusKnot);
+
+            // 添加灯光
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+            
+            const pointLight = new THREE.PointLight(0xffd700, 1);
+            pointLight.position.set(10, 10, 10);
+            scene.add(pointLight);
+
+            camera.position.z = 30;
+
+            // 动画循环
+            function animate() {
+                requestAnimationFrame(animate);
+                torusKnot.rotation.x += 0.01;
+                torusKnot.rotation.y += 0.01;
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+
+            // 响应容器大小变化
+            window.addEventListener('resize', () => {
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+        }
+
+        // 页面加载完成后初始化
+        window.onload = function() {
+            initStars();
+            createFlowers();
+            
+            // 延迟初始化3D模型，提升加载速度
+            setTimeout(() => {
+                initSagittarius3D();
+            }, 1000);
+            
+            // 打字机效果
+            const headerText = document.querySelector('.header h1');
+            const originalText = headerText.textContent;
+            headerText.textContent = '';
+            
+            let index = 0;
+            function typeWriter() {
+                if (index < originalText.length) {
+                    headerText.textContent += originalText.charAt(index);
+                    index++;
+                    setTimeout(typeWriter, 100);
+                }
+            }
+            
+            typeWriter();
+        };
+    </script>
+</body>
+</html>
